@@ -3,10 +3,10 @@
 Radeon SponsorSkin creates realistic sponsorship mockups while preserving the
 exact geometry of a user-provided SVG or transparent PNG logo.
 
-The local development slice currently implements validated logo loading,
-four-corner perspective placement, deterministic compositing, edit-mask
-generation, and exported intermediate artifacts. FLUX.2 refinement remains
-disabled until it is validated on Radeon Cloud.
+The local development slice implements validated logo loading, four-corner
+perspective placement, deterministic compositing, edit-mask generation, exact
+logo restoration, objective quality metrics, and reproducible run manifests.
+FLUX.2 refinement remains disabled until it is validated on Radeon Cloud.
 
 ## Local setup
 
@@ -34,6 +34,25 @@ python scripts/compose.py \
 
 The command writes `original.png`, `logo_layer.png`,
 `rough_composite.png`, `edit_mask.png`, and `exact_alpha.png`.
+
+## Complete local pipeline
+
+Use the passthrough backend to verify the full artifact contract without a GPU:
+
+```bash
+python scripts/run_local.py \
+  --target path/to/photo.png \
+  --logo path/to/logo.svg \
+  --point 100,100 --point 500,110 --point 490,350 --point 110,340 \
+  --material billboard \
+  --seed 42
+```
+
+Each invocation creates a new directory under `runs/`. It includes the source
+and intermediate images, `final.png`, an illumination visualization,
+`metrics.json`, and `manifest.json` with settings and environment provenance.
+The local passthrough output is intentionally deterministic and does not claim
+generative refinement.
 
 ## Test and lint
 
