@@ -1,0 +1,28 @@
+{
+  "scope": "Deterministic local preview; no model or Radeon GPU used",
+  "example": {
+    "id": "billboard",
+    "title": "NOVA GRID billboard",
+    "target": "inputs/billboard.png",
+    "logo": "logos/nova-grid.png",
+    "material": "billboard",
+    "points": [
+      [
+        255,
+        235
+      ],
+      [
+        1015,
+        210
+      ],
+      [
+        980,
+        530
+      ],
+      [
+        285,
+        550
+      ]
+    ]
+  }
+}

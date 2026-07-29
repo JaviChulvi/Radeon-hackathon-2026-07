@@ -1,0 +1,28 @@
+{
+  "scope": "Deterministic local preview; no model or Radeon GPU used",
+  "example": {
+    "id": "vehicle-panel",
+    "title": "APEX ZERO vehicle panel",
+    "target": "inputs/vehicle-panel.png",
+    "logo": "logos/apex-zero.png",
+    "material": "vinyl",
+    "points": [
+      [
+        350,
+        340
+      ],
+      [
+        945,
+        315
+      ],
+      [
+        900,
+        515
+      ],
+      [
+        380,
+        535
+      ]
+    ]
+  }
+}

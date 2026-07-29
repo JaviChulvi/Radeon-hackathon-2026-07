@@ -1,0 +1,28 @@
+{
+  "scope": "Deterministic local preview; no model or Radeon GPU used",
+  "example": {
+    "id": "fabric",
+    "title": "KINETIQ fabric print",
+    "target": "inputs/fabric.png",
+    "logo": "logos/kinetiq.png",
+    "material": "fabric_print",
+    "points": [
+      [
+        440,
+        300
+      ],
+      [
+        840,
+        300
+      ],
+      [
+        820,
+        505
+      ],
+      [
+        460,
+        505
+      ]
+    ]
+  }
+}

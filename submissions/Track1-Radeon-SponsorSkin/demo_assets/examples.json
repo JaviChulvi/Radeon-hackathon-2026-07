@@ -1,0 +1,77 @@
+[
+  {
+    "id": "billboard",
+    "title": "NOVA GRID billboard",
+    "target": "inputs/billboard.png",
+    "logo": "logos/nova-grid.png",
+    "material": "billboard",
+    "points": [
+      [
+        255,
+        235
+      ],
+      [
+        1015,
+        210
+      ],
+      [
+        980,
+        530
+      ],
+      [
+        285,
+        550
+      ]
+    ]
+  },
+  {
+    "id": "vehicle-panel",
+    "title": "APEX ZERO vehicle panel",
+    "target": "inputs/vehicle-panel.png",
+    "logo": "logos/apex-zero.png",
+    "material": "vinyl",
+    "points": [
+      [
+        350,
+        340
+      ],
+      [
+        945,
+        315
+      ],
+      [
+        900,
+        515
+      ],
+      [
+        380,
+        535
+      ]
+    ]
+  },
+  {
+    "id": "fabric",
+    "title": "KINETIQ fabric print",
+    "target": "inputs/fabric.png",
+    "logo": "logos/kinetiq.png",
+    "material": "fabric_print",
+    "points": [
+      [
+        440,
+        300
+      ],
+      [
+        840,
+        300
+      ],
+      [
+        820,
+        505
+      ],
+      [
+        460,
+        505
+      ]
+    ]
+  }
+]

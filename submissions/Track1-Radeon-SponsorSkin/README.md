@@ -153,6 +153,22 @@ python scripts/validate_dataset.py path/to/canonical-dataset \
 LoRA remains non-blocking and must not enter the demo unless it trains, reloads,
 and passes the documented held-out acceptance gate on Radeon.
 
+## Reproducible demo fixtures
+
+Three fictional procedural fixtures cover billboard, vehicle-panel vinyl, and
+fabric-print placement:
+
+```bash
+python scripts/generate_demo_assets.py --output demo_assets --force
+```
+
+The generated inputs, transparent wordmarks, corners, licenses, masks, and
+rough composites are committed under `demo_assets/`. Their metadata explicitly
+labels every existing preview as local passthrough output. These fixtures are
+safe for development and documentation; final judging examples should add
+rights-cleared real photographs and measured Radeon refinements when cloud
+access is available.
+
 ## Radeon status
 
 No Radeon/ROCm claim is made from local macOS testing. GPU inference,
