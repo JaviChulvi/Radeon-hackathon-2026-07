@@ -12,7 +12,7 @@ FLUX.2 refinement remains disabled until it is validated on Radeon Cloud.
 
 ```bash
 conda activate radeon-sponsorskin
-python -m pip install -e ".[dev]"
+python -m pip install -e ".[dev,ui]"
 ```
 
 To create or update the complete Conda environment, including the native Cairo
@@ -21,6 +21,18 @@ library required for SVG rendering:
 ```bash
 mamba env update --file environment.yml --prune
 ```
+
+## Interactive local app
+
+```bash
+python app.py
+```
+
+Open `http://127.0.0.1:7860`, upload a target and authorized logo, then click
+four corners on the target surface. The UI supports deterministic preview,
+versioned local runs, metric inspection, and final/manifest downloads. Its
+local badge remains visible because this mode does not execute generative
+inference.
 
 ## Deterministic composition
 

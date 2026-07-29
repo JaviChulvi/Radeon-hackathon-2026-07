@@ -6,4 +6,4 @@ dependencies:
   - pip
   - cairo=1.18
   - pip:
-      - -e .[dev]
+      - -e .[dev,ui]
