@@ -1,0 +1,6 @@
+# Keep the Radeon Cloud platform's ROCm PyTorch build. Do not add torch here.
+git+https://github.com/huggingface/diffusers.git@9e969b6cf0588fd75fbacee9a39d16a3f5c56fc4
+accelerate>=0.31.0
+huggingface-hub>=1.23.0,<2.0
+sentencepiece>=0.1.91,!=0.1.92
+transformers>=4.51.0,<6

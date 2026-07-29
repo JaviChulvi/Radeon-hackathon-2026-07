@@ -20,8 +20,9 @@ from sponsorskin.schemas import (
     RestorationSettings,
     RunManifest,
 )
+from sponsorskin.version import __version__
 
-APP_VERSION = "0.2.0"
+APP_VERSION = __version__
 
 
 @dataclass(frozen=True)

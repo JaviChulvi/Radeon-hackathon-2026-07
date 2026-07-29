@@ -6,8 +6,15 @@ import gradio as gr
 import numpy as np
 from PIL import Image, ImageDraw
 
+from sponsorskin.inference import Flux2KleinRefiner, PassthroughRefiner
 from sponsorskin.schemas import PlacementSettings
-from sponsorskin.ui import add_corner, build_app, create_preview, run_local_generation
+from sponsorskin.ui import (
+    add_corner,
+    backend_from_environment,
+    build_app,
+    create_preview,
+    run_local_generation,
+)
 
 
 def make_files(tmp_path: Path) -> tuple[Path, Path]:
@@ -57,3 +64,21 @@ def test_app_builds_without_starting_a_server() -> None:
     demo = build_app()
 
     assert isinstance(demo, gr.Blocks)
+
+
+def test_backend_selection_defaults_to_passthrough(monkeypatch) -> None:
+    monkeypatch.delenv("SPONSORSKIN_BACKEND", raising=False)
+
+    backend = backend_from_environment(strength=0.65, num_inference_steps=4)
+
+    assert isinstance(backend, PassthroughRefiner)
+
+
+def test_flux_backend_selection_is_lazy(monkeypatch) -> None:
+    monkeypatch.setenv("SPONSORSKIN_BACKEND", "flux2")
+
+    backend = backend_from_environment(strength=0.55, num_inference_steps=6)
+
+    assert isinstance(backend, Flux2KleinRefiner)
+    assert backend.settings.strength == 0.55
+    assert backend.settings.num_inference_steps == 6

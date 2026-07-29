@@ -38,6 +38,22 @@ class PlacementSettings(BaseModel):
     material: MaterialPreset = MaterialPreset.VINYL
 
 
+class Flux2Settings(BaseModel):
+    """Safe initial settings for the Radeon FLUX.2 Klein inpaint backend."""
+
+    model_config = ConfigDict(frozen=True)
+
+    model_id: str = "black-forest-labs/FLUX.2-klein-4B"
+    model_revision: str | None = None
+    num_inference_steps: int = Field(default=4, ge=1, le=50)
+    strength: float = Field(default=0.65, gt=0, le=1)
+    guidance_scale: float = Field(default=1.0, ge=0, le=20)
+    padding_mask_crop: int | None = Field(default=32, ge=0, le=256)
+    maximum_pixels: int = Field(default=1024 * 1024, ge=256 * 256, le=2048 * 2048)
+    enable_cpu_offload: bool = False
+    require_rocm: bool = True
+
+
 class RestorationSettings(BaseModel):
     """Controls how generated illumination is transferred to the exact logo."""
 

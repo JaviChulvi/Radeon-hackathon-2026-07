@@ -1,15 +1,15 @@
 {
   "backend": "local-passthrough",
   "benchmark": "complete-local-passthrough-pipeline",
-  "captured_at": "2026-07-29T23:16:47.680645+00:00",
+  "captured_at": "2026-07-29T23:41:19.312844+00:00",
   "environment": {
-    "captured_at": "2026-07-29T23:16:47.680781+00:00",
+    "captured_at": "2026-07-29T23:41:19.312998+00:00",
     "packages": {
       "Pillow": "12.3.0",
       "gradio": "6.21.0",
       "numpy": "2.5.1",
       "opencv-python-headless": "5.0.0.93",
-      "radeon-sponsorskin": "0.2.0",
+      "radeon-sponsorskin": "0.3.0",
       "scikit-image": "0.26.0"
     },
     "rocm_ready": false,
@@ -50,7 +50,7 @@
     "width": 1280
   },
   "iterations": 5,
-  "python_tracemalloc_peak_bytes": 193328335,
+  "python_tracemalloc_peak_bytes": 193327957,
   "quality_metrics": {
     "edit_mask_coverage": 0.2684407552083333,
     "logo_mean_delta_e": 0.0,
@@ -67,16 +67,16 @@
   "scope": "CPU-safe local development benchmark; no generative model or Radeon GPU used",
   "seed": 42,
   "timings_seconds": {
-    "first_run": 0.437589040999228,
-    "warm_max": 0.4145949160010787,
-    "warm_mean": 0.3900022392494975,
-    "warm_median": 0.3864428329989096,
-    "warm_min": 0.3725283749990922,
+    "first_run": 0.4537712500005,
+    "warm_max": 0.43730433299970173,
+    "warm_mean": 0.42453396824976153,
+    "warm_median": 0.4205337494995547,
+    "warm_min": 0.419764041000235,
     "warm_runs": [
-      0.4145949160010787,
-      0.3917180409989669,
-      0.38116762499885226,
-      0.3725283749990922
+      0.43730433299970173,
+      0.42116429099951347,
+      0.419764041000235,
+      0.4199032079995959
     ]
   }
 }

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
@@ -9,8 +10,14 @@ import gradio as gr
 from PIL import Image, ImageDraw
 
 from sponsorskin.compositing import CompositeArtifacts, create_composite
+from sponsorskin.inference import (
+    BackendUnavailableError,
+    Flux2KleinRefiner,
+    PassthroughRefiner,
+    RefinementBackend,
+)
 from sponsorskin.pipeline import PipelineRun, run_pipeline
-from sponsorskin.schemas import MaterialPreset, PlacementSettings, Point
+from sponsorskin.schemas import Flux2Settings, MaterialPreset, PlacementSettings, Point
 from sponsorskin.validation import load_logo_image, load_target_image
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -21,6 +28,28 @@ SPONSORSKIN_CSS = """
 .local-badge { border-left: 4px solid #e12d39; padding: 0.6rem 0.9rem; }
 .primary-action button { font-weight: 700; }
 """
+
+
+def backend_from_environment(
+    *,
+    strength: float,
+    num_inference_steps: int,
+) -> RefinementBackend:
+    """Construct the explicitly selected app backend without loading model weights."""
+
+    backend_name = os.getenv("SPONSORSKIN_BACKEND", "passthrough").strip().lower()
+    if backend_name in {"passthrough", "local"}:
+        return PassthroughRefiner()
+    if backend_name in {"flux2", "flux2-klein-inpaint-rocm"}:
+        return Flux2KleinRefiner(
+            Flux2Settings(
+                strength=strength,
+                num_inference_steps=num_inference_steps,
+                model_revision=os.getenv("SPONSORSKIN_MODEL_REVISION") or None,
+                enable_cpu_offload=os.getenv("SPONSORSKIN_CPU_OFFLOAD", "0") == "1",
+            )
+        )
+    raise ValueError(f"SPONSORSKIN_BACKEND must be 'passthrough' or 'flux2', not {backend_name!r}.")
 
 
 def _point_models(points: list[tuple[float, float]] | None) -> list[Point]:
@@ -169,8 +198,9 @@ def run_local_generation(
     *,
     seed: int,
     runs_root: str | Path = RUNS_ROOT,
+    backend: RefinementBackend | None = None,
 ) -> PipelineRun:
-    """Run and persist the complete local passthrough workflow."""
+    """Run and persist the complete workflow with an explicitly selected backend."""
 
     return run_pipeline(
         load_target_image(target_path),
@@ -178,6 +208,7 @@ def run_local_generation(
         _point_models(points),
         output_root=runs_root,
         placement=settings,
+        backend=backend,
         seed=seed,
     )
 
@@ -231,6 +262,8 @@ def generate_for_ui(
     mask_padding: int,
     feather_radius: float,
     material: str,
+    refinement_strength: float,
+    inference_steps: int,
     seed: int,
 ) -> tuple[
     Image.Image,
@@ -247,6 +280,10 @@ def generate_for_ui(
     if not target_path or not logo_path:
         raise gr.Error("Upload both a target photo and a logo.")
     try:
+        backend = backend_from_environment(
+            strength=refinement_strength,
+            num_inference_steps=inference_steps,
+        )
         result = run_local_generation(
             target_path,
             logo_path,
@@ -260,8 +297,9 @@ def generate_for_ui(
                 material,
             ),
             seed=seed,
+            backend=backend,
         )
-    except ValueError as exc:
+    except (BackendUnavailableError, ValueError) as exc:
         raise gr.Error(str(exc)) from exc
     return (
         result.artifacts.original,
@@ -272,8 +310,16 @@ def generate_for_ui(
         str(result.run_directory / "final.png"),
         str(result.run_directory / "manifest.json"),
         (
-            f"Local run `{result.run_directory.name}` completed with the passthrough backend. "
-            "No generative model or Radeon GPU was used."
+            (
+                f"Local run `{result.run_directory.name}` completed with the passthrough backend. "
+                "No generative model or Radeon GPU was used."
+            )
+            if result.manifest.backend == "local-passthrough"
+            else (
+                f"Radeon run `{result.run_directory.name}` completed with "
+                f"`{result.manifest.backend}` in "
+                f"{result.refinement.latency_seconds:.3f} seconds."
+            )
         ),
     )
 
@@ -281,16 +327,28 @@ def generate_for_ui(
 def build_app() -> gr.Blocks:
     """Build the SponsorSkin local development application."""
 
-    with gr.Blocks(title="Radeon SponsorSkin — Local Lab") as demo:
+    radeon_mode = os.getenv("SPONSORSKIN_BACKEND", "passthrough").strip().lower() in {
+        "flux2",
+        "flux2-klein-inpaint-rocm",
+    }
+    mode_title = "RADEON FLUX.2 MODE" if radeon_mode else "LOCAL PASSTHROUGH MODE"
+    mode_description = (
+        "runs masked FLUX.2 Klein inference through ROCm and records measured device evidence."
+        if radeon_mode
+        else (
+            "validates the complete workflow, restoration, metrics, and exports without running "
+            "a generative model or claiming Radeon performance."
+        )
+    )
+    with gr.Blocks(title="Radeon SponsorSkin") as demo:
         points_state = gr.State([])
         gr.Markdown(
-            """
-            # Radeon SponsorSkin · Local Lab
+            f"""
+            # Radeon SponsorSkin · Creation Lab
             Turn a photo and an authorized logo into a perspective-correct sponsorship mockup.
 
-            <div class="local-badge"><strong>LOCAL PASSTHROUGH MODE</strong> —
-            validates the complete workflow, restoration, metrics, and exports without running
-            a generative model or claiming Radeon performance.</div>
+            <div class="local-badge"><strong>{mode_title}</strong> —
+            {mode_description}</div>
             """,
             elem_classes="sponsorskin-hero",
         )
@@ -328,10 +386,29 @@ def build_app() -> gr.Blocks:
                     value=MaterialPreset.VINYL.value,
                     label="Surface material",
                 )
+                gr.Markdown("### Refinement controls")
+                refinement_strength = gr.Slider(
+                    0.1,
+                    1.0,
+                    value=0.65,
+                    step=0.05,
+                    label="Refinement strength (FLUX.2 mode)",
+                )
+                inference_steps = gr.Slider(
+                    1,
+                    20,
+                    value=4,
+                    step=1,
+                    label="Inference steps (FLUX.2 mode)",
+                )
                 seed = gr.Number(value=42, precision=0, label="Seed")
                 preview_button = gr.Button("Build deterministic preview")
                 generate_button = gr.Button(
-                    "Run complete local pipeline",
+                    (
+                        "Run Radeon FLUX.2 pipeline"
+                        if radeon_mode
+                        else "Run complete local pipeline"
+                    ),
                     variant="primary",
                     elem_classes="primary-action",
                 )
@@ -345,7 +422,10 @@ def build_app() -> gr.Blocks:
             with gr.Tab("Pipeline comparison"), gr.Row():
                 original_result = gr.Image(label="Original", type="pil")
                 rough_result = gr.Image(label="Rough", type="pil")
-                refined_result = gr.Image(label="Refined (passthrough)", type="pil")
+                refined_result = gr.Image(
+                    label=("Refined (FLUX.2)" if radeon_mode else "Refined (passthrough)"),
+                    type="pil",
+                )
                 final_result = gr.Image(label="Final", type="pil")
             with gr.Tab("Quality & downloads"):
                 metrics_json = gr.JSON(label="Quality metrics")
@@ -386,7 +466,7 @@ def build_app() -> gr.Blocks:
         )
         generate_button.click(
             generate_for_ui,
-            inputs=[*setting_inputs, seed],
+            inputs=[*setting_inputs, refinement_strength, inference_steps, seed],
             outputs=[
                 original_result,
                 rough_result,

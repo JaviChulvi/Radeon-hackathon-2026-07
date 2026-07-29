@@ -1,0 +1,22 @@
+status: experimental
+release_blocker: false
+model_id: black-forest-labs/FLUX.2-klein-base-4B
+model_revision: null
+precision: bfloat16
+resolution: 512
+batch_size: 1
+gradient_checkpointing: true
+optimizer: adamw
+learning_rate: 0.0001
+pilot_steps: 50
+rank: 16
+alpha: 16
+forbidden_optimizations:
+  - fp8
+  - bitsandbytes
+  - xformers
+  - cuda_only_kernels
+acceptance_gate:
+  minimum_held_out_win_rate: 0.60
+  require_rocm_evidence: true
+  require_loadable_checkpoint: true
