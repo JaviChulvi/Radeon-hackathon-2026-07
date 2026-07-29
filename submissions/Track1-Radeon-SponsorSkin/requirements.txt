@@ -1,0 +1,6 @@
+CairoSVG==2.9.0
+defusedxml==0.7.1
+numpy==2.5.1
+opencv-python-headless==5.0.0.93
+Pillow==12.3.0
+pydantic==2.13.4

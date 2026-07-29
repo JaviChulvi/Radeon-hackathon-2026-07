@@ -19,11 +19,11 @@ python scripts/doctor.py
 python scripts/benchmark.py
 ```
 
-`app.py` starts Gradio. `doctor.py` reports Python, PyTorch, GPU, and ROCm details. `benchmark.py` writes reproducible timing and memory results. The source package is not scaffolded yet; keep these entrypoints stable once introduced.
+`app.py` starts Gradio. `doctor.py` reports Python, PyTorch, GPU, and ROCm details. `benchmark.py` writes reproducible timing and memory results. Keep these entrypoints stable.
 
 ## Coding Style & Naming Conventions
 
-Use four-space indentation, explicit type hints on public functions, and small modules with one clear responsibility. Use `snake_case` for modules, functions, and variables; `PascalCase` for classes and Pydantic models; and `UPPER_SNAKE_CASE` for constants. Keep UI callbacks thin and put geometry, compositing, inference, restoration, and evaluation logic in services. No formatter is configured yet; add Ruff formatting and linting with the initial Python scaffold.
+Use four-space indentation, explicit type hints on public functions, and small modules with one clear responsibility. Use `snake_case` for modules, functions, and variables; `PascalCase` for classes and Pydantic models; and `UPPER_SNAKE_CASE` for constants. Keep UI callbacks thin and put geometry, compositing, inference, restoration, and evaluation logic in services. Run `ruff format .` and `ruff check .` before committing.
 
 ## Testing Guidelines
 

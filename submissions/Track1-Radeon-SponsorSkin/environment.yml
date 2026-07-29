@@ -1,0 +1,9 @@
+name: radeon-sponsorskin
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - cairo=1.18
+  - pip:
+      - -e .[dev]

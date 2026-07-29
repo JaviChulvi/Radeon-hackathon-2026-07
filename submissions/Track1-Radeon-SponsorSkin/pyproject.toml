@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "radeon-sponsorskin"
+version = "0.1.0"
+description = "Exact-logo-aware sponsorship mockup creation for AMD Radeon"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "Apache-2.0" }
+dependencies = [
+  "CairoSVG==2.9.0",
+  "defusedxml==0.7.1",
+  "numpy==2.5.1",
+  "opencv-python-headless==5.0.0.93",
+  "Pillow==12.3.0",
+  "pydantic==2.13.4",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.1.1",
+  "ruff==0.16.0",
+]
+ui = [
+  "gradio==6.21.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["sponsorskin*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "radeon: requires a Radeon GPU and ROCm",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "SIM", "UP"]
