@@ -1,0 +1,42 @@
+{
+  "captured_at": "2026-07-29T23:16:45.669129+00:00",
+  "packages": {
+    "Pillow": "12.3.0",
+    "gradio": "6.21.0",
+    "numpy": "2.5.1",
+    "opencv-python-headless": "5.0.0.93",
+    "radeon-sponsorskin": "0.2.0",
+    "scikit-image": "0.26.0"
+  },
+  "rocm_ready": false,
+  "schema_version": "1.0",
+  "scope": "Local development runtime; Radeon/ROCm inference not verified",
+  "system": {
+    "machine": "arm64",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "processor": "arm",
+    "python_version": "3.12.13"
+  },
+  "tools": {
+    "amd-smi": {
+      "available": false,
+      "output": null,
+      "path": null
+    },
+    "rocm-smi": {
+      "available": false,
+      "output": null,
+      "path": null
+    }
+  },
+  "torch": {
+    "bf16_supported": null,
+    "cuda_api_available": false,
+    "device_count": 0,
+    "device_name": null,
+    "installed": false,
+    "rocm_version": null,
+    "total_memory_bytes": null,
+    "version": null
+  }
+}

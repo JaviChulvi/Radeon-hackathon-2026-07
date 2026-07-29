@@ -74,6 +74,19 @@ ruff check .
 ruff format --check .
 ```
 
+## Environment doctor and local benchmark
+
+```bash
+python scripts/doctor.py --json benchmarks/local-environment.json
+python scripts/benchmark.py --output benchmarks/local-results.json
+```
+
+`doctor.py` records Python, dependency, PyTorch, accelerator, ROCm, and AMD SMI
+facts without assuming a GPU exists. Add `--require-rocm` in Radeon Cloud to
+make missing ROCm/device detection fail fast. The local benchmark times the
+complete passthrough artifact path; it is CPU development evidence, not a
+generative-inference or Radeon benchmark.
+
 ## Radeon status
 
 No Radeon/ROCm claim is made from local macOS testing. GPU inference,
