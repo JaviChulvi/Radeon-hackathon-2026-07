@@ -863,7 +863,7 @@ def _profile_status(pdf: canvas.Canvas) -> None:
 
 def build_profile(output_path: Path) -> None:
     benchmark = json.loads((PROJECT_ROOT / "benchmarks/local-results.json").read_text())
-    pdf = canvas.Canvas(str(output_path), pagesize=A4)
+    pdf = canvas.Canvas(str(output_path), pagesize=A4, invariant=1)
     pdf.setTitle("Radeon SponsorSkin - Project Profile")
     pdf.setAuthor("Radeon SponsorSkin contributors")
     pages = [
@@ -885,7 +885,7 @@ def build_profile(output_path: Path) -> None:
 
 def build_poster(output_path: Path) -> None:
     width, height = landscape(A3)
-    pdf = canvas.Canvas(str(output_path), pagesize=(width, height))
+    pdf = canvas.Canvas(str(output_path), pagesize=(width, height), invariant=1)
     pdf.setTitle("Radeon SponsorSkin - Track 1 Poster")
     pdf.setAuthor("Radeon SponsorSkin contributors")
     pdf.setFillColor(INK)

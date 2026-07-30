@@ -1,97 +1,152 @@
 # Radeon SponsorSkin
 
-Radeon SponsorSkin creates realistic sponsorship mockups while preserving the
-exact geometry of a user-provided SVG or transparent PNG logo.
+Radeon SponsorSkin turns a target photograph and an exact SVG or transparent
+PNG logo into an auditable sponsorship mockup while keeping brand geometry
+outside the generative model.
 
-The local development slice implements validated logo loading, four-corner
-perspective placement, deterministic compositing, edit-mask generation, exact
-logo restoration, objective quality metrics, and reproducible run manifests.
-FLUX.2 refinement remains disabled until it is validated on Radeon Cloud.
+![Local deterministic billboard preview](demo_assets/local_previews/billboard/rough_composite.png)
 
-## Local setup
+> The image above is a procedural, deterministic local preview. It is not
+> generative output and does not demonstrate Radeon performance.
+
+## Track 1 fit
+
+SponsorSkin is a multimodal content-creation tool with a complete
+image-plus-logo input, placement, processing, comparison, evaluation, and
+export workflow. Its differentiator is the separation of responsibilities:
+computer vision owns the exact logo; masked FLUX.2 refinement owns only local
+surface material, lighting, reflections, and texture.
+
+The local development candidate is complete. Real FLUX.2 output, Radeon/ROCm
+compatibility, latency, and peak VRAM remain pending access to the assigned
+Radeon Cloud instance. No local macOS measurement is presented as GPU evidence.
+
+## Implemented features
+
+- JPEG, PNG, and WebP target validation with EXIF correction.
+- Transparent PNG and safe SVG logo validation and rasterization.
+- Four-click quadrilateral placement in any click order.
+- Scale, rotation, opacity, mask-padding, and feather controls.
+- Exact perspective warp, rough composite, exact alpha, and edit mask.
+- Local passthrough and fail-closed Radeon FLUX.2 backend selection.
+- Smooth illumination transfer onto the exact warped logo.
+- Original, rough, model-only, and final comparison.
+- Preservation, SSIM, color, sharpness, and mask metrics.
+- Unique run directories with images, settings, environment, and manifest.
+- Three rights-clear procedural fixtures and an interactive Gradio UI.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A["Target image"] --> V["Validation"]
+    B["Exact logo"] --> V
+    C["Four corners + controls"] --> G["Homography + exact composite"]
+    V --> G
+    G --> F{"Refinement backend"}
+    F -->|Local development| P["Passthrough"]
+    F -->|Radeon Cloud| K["FLUX.2 Klein inpaint"]
+    P --> R["Exact-logo restoration"]
+    K --> R
+    R --> Q["Metrics + outside-mask lock"]
+    Q --> O["Final PNG + manifest"]
+```
+
+See [the detailed architecture](docs/architecture.md) for module boundaries and
+invariants.
+
+## Local environment
+
+The committed local evidence was captured with Python 3.12.13 on macOS arm64
+(Apple M3 Pro), without PyTorch, ROCm, or an AMD GPU. The Conda environment is
+named `radeon-sponsorskin`.
 
 ```bash
+cd submissions/Track1-Radeon-SponsorSkin
+mamba env update --file environment.yml --prune
 conda activate radeon-sponsorskin
+```
+
+If the environment already exists:
+
+```bash
 python -m pip install -e ".[dev,docs,ui]"
 ```
 
-To create or update the complete Conda environment, including the native Cairo
-library required for SVG rendering:
+Native Cairo is required for SVG logos. `environment.yml` installs it from
+conda-forge.
 
-```bash
-mamba env update --file environment.yml --prune
-```
-
-## Interactive local app
+## Start the interactive app
 
 ```bash
 python app.py
 ```
 
-Open `http://127.0.0.1:7860`, upload a target and authorized logo, then click
-four corners on the target surface. The UI supports deterministic preview,
-versioned local runs, metric inspection, and final/manifest downloads. Its
-local badge remains visible because this mode does not execute generative
-inference.
+Open `http://127.0.0.1:7860` and:
 
-## Deterministic composition
+1. Upload a target and an authorized transparent logo.
+2. Click four surface corners on the target.
+3. Choose a material and adjust placement controls.
+4. Build the deterministic preview and inspect the exact layer and mask.
+5. Run the selected backend.
+6. Compare original, rough, model-only, and restored final images.
+7. Inspect metrics and download the final PNG and manifest.
+
+The default local badge remains visible because passthrough mode does not
+execute a model or GPU.
+
+## Command-line workflows
+
+Create only the deterministic composition artifacts:
 
 ```bash
 python scripts/compose.py \
-  --target path/to/photo.png \
-  --logo path/to/logo.png \
-  --point 100,100 --point 500,110 --point 490,350 --point 110,340 \
-  --output runs/example
+  --target demo_assets/inputs/billboard.png \
+  --logo demo_assets/logos/nova-grid.png \
+  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
+  --material billboard \
+  --output runs/compose-example
 ```
 
-The command writes `original.png`, `logo_layer.png`,
-`rough_composite.png`, `edit_mask.png`, and `exact_alpha.png`.
-
-## Complete local pipeline
-
-Use the passthrough backend to verify the full artifact contract without a GPU:
+Exercise the complete artifact contract with local passthrough:
 
 ```bash
 python scripts/run_local.py \
-  --target path/to/photo.png \
-  --logo path/to/logo.svg \
-  --point 100,100 --point 500,110 --point 490,350 --point 110,340 \
-  --material billboard \
-  --seed 42
+  --target demo_assets/inputs/billboard.png \
+  --logo demo_assets/logos/nova-grid.png \
+  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
+  --material billboard --seed 42
 ```
 
-Each invocation creates a new directory under `runs/`. It includes the source
-and intermediate images, `final.png`, an illumination visualization,
-`metrics.json`, and `manifest.json` with settings and environment provenance.
-The local passthrough output is intentionally deterministic and does not claim
-generative refinement.
+Regenerate the three committed fictional fixtures:
 
-## Test and lint
+```bash
+python scripts/generate_demo_assets.py --output demo_assets --force
+```
+
+## Tests and local evidence
 
 ```bash
 python -m pytest tests -q
 ruff check .
 ruff format --check .
-```
-
-## Environment doctor and local benchmark
-
-```bash
 python scripts/doctor.py --json benchmarks/local-environment.json
 python scripts/benchmark.py --output benchmarks/local-results.json
 ```
 
-`doctor.py` records Python, dependency, PyTorch, accelerator, ROCm, and AMD SMI
-facts without assuming a GPU exists. Add `--require-rocm` in Radeon Cloud to
-make missing ROCm/device detection fail fast. The local benchmark times the
-complete passthrough artifact path; it is CPU development evidence, not a
-generative-inference or Radeon benchmark.
+Expected CPU-safe result at this revision: `35 passed`. The committed 1280 x
+768 passthrough benchmark records an outside changed-pixel ratio of `0`, an
+outside SSIM of `1`, and a warm mean of approximately `0.425 s`. That timing is
+for the deterministic artifact path only—no generative model and no Radeon GPU
+were used.
+
+- [Local environment JSON](benchmarks/local-environment.json)
+- [Local benchmark JSON](benchmarks/local-results.json)
 
 ## Radeon Cloud handoff
 
-This code path is prepared but remains unverified until access to the assigned
-Radeon Cloud instance is available. Keep the platform ROCm PyTorch build; do
-not install or upgrade `torch` from PyPI.
+Keep the platform ROCm PyTorch build. Do not install or upgrade `torch` from
+PyPI.
 
 ```bash
 python -m pip install -e ".[dev,docs,ui]"
@@ -100,33 +155,28 @@ python scripts/doctor.py --require-rocm \
   --json benchmarks/radeon-environment.json
 ```
 
-`requirements-radeon.txt` pins the current Diffusers source revision that
-contains `Flux2KleinInpaintPipeline`. The model revision stays unset until the
-first successful cloud smoke test, when it must be pinned in the configuration
-and captured in benchmark evidence.
-
-Run one masked model smoke test:
+Run one masked smoke test:
 
 ```bash
 python scripts/smoke_flux.py \
-  --target path/to/photo.png \
-  --logo path/to/logo.png \
-  --point 100,100 --point 500,110 --point 490,350 --point 110,340 \
+  --target demo_assets/inputs/billboard.png \
+  --logo demo_assets/logos/nova-grid.png \
+  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
   --material billboard --steps 4 --strength 0.65
 ```
 
-Measure one cold process path plus at least three warm inference runs:
+Measure one cold process path and at least three warm runs:
 
 ```bash
 python scripts/benchmark_flux.py \
-  --target path/to/photo.png \
-  --logo path/to/logo.png \
-  --point 100,100 --point 500,110 --point 490,350 --point 110,340 \
+  --target demo_assets/inputs/billboard.png \
+  --logo demo_assets/logos/nova-grid.png \
+  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
   --material billboard --iterations 4 \
   --output benchmarks/radeon-results.json
 ```
 
-After the smoke test passes, launch the same UI with the Radeon backend:
+After both gates pass, launch the same interface with the Radeon backend:
 
 ```bash
 SPONSORSKIN_BACKEND=flux2 \
@@ -134,63 +184,97 @@ SPONSORSKIN_SERVER_NAME=0.0.0.0 \
 python app.py
 ```
 
-The backend lazily loads
-`black-forest-labs/FLUX.2-klein-4B` in BF16, fails closed when
-`torch.version.hip` or the device is missing, keeps output dimensions aligned
-with restoration, and records latency, peak allocated VRAM, GPU, ROCm,
-PyTorch, model, and dependency provenance in every manifest.
+The backend lazily loads in BF16, refuses to run without `torch.version.hip`
+and an accelerator, aligns dimensions for inference/restoration, and records
+latency, peak allocated VRAM, GPU, ROCm, PyTorch, model, and dependency
+provenance.
 
-## Paired-dataset validation
+## Models and revisions
 
-The optional LoRA experiment uses a trainer-independent canonical format. See
-`docs/dataset-methodology.md`, then validate every pair and rights record:
+| Component | Identifier / revision | License | Status |
+|---|---|---|---|
+| Release inference | `black-forest-labs/FLUX.2-klein-4B` | Apache-2.0 | Backend implemented; Radeon execution pending |
+| Diffusers source | `9e969b6cf0588fd75fbacee9a39d16a3f5c56fc4` | Apache-2.0 | Pinned in `requirements-radeon.txt` |
+| Model weights | Exact Hugging Face revision | Apache-2.0 | Must be pinned after the first passing cloud smoke test |
+| Local passthrough | No model | Project Apache-2.0 | Tested locally |
+
+Model access may require accepting the terms on the
+[Hugging Face model page](https://huggingface.co/black-forest-labs/FLUX.2-klein-4B)
+and authenticating with `huggingface-cli login`. The model is downloaded at
+first Radeon execution; weights are never committed.
+
+## Run outputs
+
+Every execution creates `runs/<UTC timestamp>-<random suffix>/`:
+
+```text
+manifest.json          original.png
+logo_original.png      logo_layer.png
+rough_composite.png    edit_mask.png
+exact_alpha.png        refined.png
+final.png              shading_map.png
+metrics.json
+```
+
+`runs/` is ignored by Git. `manifest.json` contains placement settings, ordered
+points, seed, app version, backend, model, environment, latency, and artifact
+names.
+
+## Dataset and LoRA status
+
+The optional Sponsor Edit LoRA is not part of the release path and has not been
+trained. The repository contains a trainer-independent canonical paired-data
+schema, validator, rights requirements, a conservative Radeon pilot
+configuration, and a held-out acceptance gate:
 
 ```bash
 python scripts/validate_dataset.py path/to/canonical-dataset \
   --json benchmarks/dataset-validation.json
 ```
 
-LoRA remains non-blocking and must not enter the demo unless it trains, reloads,
-and passes the documented held-out acceptance gate on Radeon.
+See [dataset methodology](docs/dataset-methodology.md). LoRA may enter a demo
+only after a loadable Radeon-trained checkpoint improves held-out comparisons
+without worsening preservation or logo fidelity.
 
-## Reproducible demo fixtures
+## Assets, licensing, and security
 
-Three fictional procedural fixtures cover billboard, vehicle-panel vinyl, and
-fabric-print placement:
+The code and committed procedural fixtures are licensed under
+[Apache-2.0](LICENSE). NOVA GRID, APEX ZERO, and KINETIQ are fictional project
+wordmarks. See [demo asset credits](demo_assets/CREDITS.md).
 
-```bash
-python scripts/generate_demo_assets.py --output demo_assets --force
-```
+Do not commit credentials, model weights, cache directories, private
+photographs, or logos without redistribution and derivative-use rights. The
+SVG loader rejects scripts and external references.
 
-The generated inputs, transparent wordmarks, corners, licenses, masks, and
-rough composites are committed under `demo_assets/`. Their metadata explicitly
-labels every existing preview as local passthrough output. These fixtures are
-safe for development and documentation; final judging examples should add
-rights-cleared real photographs and measured Radeon refinements when cloud
-access is available.
-
-## Submission documents
+## Submission artifacts
 
 - [Project profile PDF](docs/project-profile.pdf)
 - [Project profile source](docs/project-profile.md)
 - [Poster PDF](docs/poster.pdf)
-- [Editable poster source](docs/poster.svg)
+- [Editable standalone poster](docs/poster.svg)
 - [Four-minute demo script](docs/demo-script.md)
 - [Radeon Cloud evidence checklist](docs/cloud-evidence-checklist.md)
+- Demo video: pending recording of the real Radeon execution path
+- Radeon benchmark JSON: pending the real cloud benchmark
 
-Rebuild the PDFs and editable poster after changing evidence or examples:
+Rebuild and validate the PDFs and editable poster:
 
 ```bash
 python scripts/build_submission_artifacts.py
 ```
 
-The builder validates the expected page counts and extracted text. The
-project-profile PDF is eight A4 pages; the poster is one A3 landscape page.
-Regenerate both after real Radeon measurements replace the clearly marked
-pending fields.
+The profile is eight A4 pages and the poster is one A3 landscape page.
 
-## Radeon status
+## Known limitations
 
-No Radeon/ROCm claim is made from local macOS testing. GPU inference,
-performance measurements, and LoRA training require the designated Radeon
-Cloud environment.
+- Current examples are procedural illustrations, not real photographs.
+- Current local outputs are deterministic rough previews, not FLUX.2 results.
+- Radeon model compatibility, visual improvement, latency, and VRAM are
+  unverified until cloud execution.
+- Exact model-weight revision remains intentionally unset.
+- The LoRA path is a gated experiment, not a shipped capability.
+- A real 3–5 minute Radeon demo video cannot be recorded locally.
+
+The operational order and remaining evidence fields are in
+[ROCm handoff notes](docs/rocm-notes.md) and the
+[cloud checklist](docs/cloud-evidence-checklist.md).
