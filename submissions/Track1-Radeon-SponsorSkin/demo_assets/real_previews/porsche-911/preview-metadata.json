@@ -1,0 +1,41 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "porsche-911",
+    "title": "APEX ZERO — Porsche 911 GT2 RS door",
+    "category": "sports_car",
+    "source_file": "porsche-911.jpg",
+    "target": "real_inputs/porsche-911.jpg",
+    "target_size": [
+      768,
+      1024
+    ],
+    "logo": "logos/apex-zero.png",
+    "material": "vinyl",
+    "points": [
+      [
+        485,
+        510
+      ],
+      [
+        730,
+        535
+      ],
+      [
+        715,
+        625
+      ],
+      [
+        480,
+        600
+      ]
+    ],
+    "source": {
+      "photographer": "Dante Juhasz",
+      "provider": "Pexels",
+      "photo_id": "13990526",
+      "page": "https://www.pexels.com/photo/side-of-a-modern-sports-car-13990526/",
+      "license": "https://www.pexels.com/license/"
+    }
+  }
+}

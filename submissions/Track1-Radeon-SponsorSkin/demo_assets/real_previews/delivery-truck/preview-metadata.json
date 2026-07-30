@@ -1,0 +1,41 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "delivery-truck",
+    "title": "KINETIQ — delivery truck box",
+    "category": "truck",
+    "source_file": "truck.jpg",
+    "target": "real_inputs/delivery-truck.jpg",
+    "target_size": [
+      1280,
+      768
+    ],
+    "logo": "logos/kinetiq.png",
+    "material": "vinyl",
+    "points": [
+      [
+        285,
+        300
+      ],
+      [
+        850,
+        300
+      ],
+      [
+        850,
+        480
+      ],
+      [
+        285,
+        480
+      ]
+    ],
+    "source": {
+      "photographer": "Michael Lee",
+      "provider": "Pexels",
+      "photo_id": "28158703",
+      "page": "https://www.pexels.com/photo/a-white-truck-is-parked-on-the-side-of-the-road-28158703/",
+      "license": "https://www.pexels.com/license/"
+    }
+  }
+}

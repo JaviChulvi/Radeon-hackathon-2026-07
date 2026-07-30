@@ -57,9 +57,9 @@ color drift, warnings, final PNG, and manifest.
 
 ## 3:30-3:50 - Diverse value
 
-Show already-generated billboard, vehicle-panel, and fabric examples with
-their manifests. Mention designers, small motorsport teams, event/brand teams,
-and apparel creators.
+Show already-prepared Porsche 911, bus, truck, hoodie, cap, billboard, and
+bus-shelter examples with their source credits and manifests. Mention
+designers, motorsport and fleet teams, event/brand teams, and apparel creators.
 
 ## 3:50-4:00 - Close
 

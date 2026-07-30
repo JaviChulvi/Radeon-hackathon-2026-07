@@ -1,0 +1,41 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "bus-shelter",
+    "title": "NOVA GRID — illuminated bus-shelter display",
+    "category": "street_furniture",
+    "source_file": "bus-shelter.jpg",
+    "target": "real_inputs/bus-shelter.jpg",
+    "target_size": [
+      1152,
+      864
+    ],
+    "logo": "logos/nova-grid.png",
+    "material": "billboard",
+    "points": [
+      [
+        225,
+        315
+      ],
+      [
+        365,
+        322
+      ],
+      [
+        365,
+        375
+      ],
+      [
+        225,
+        368
+      ]
+    ],
+    "source": {
+      "photographer": "Tembela Bohle",
+      "provider": "Pexels",
+      "photo_id": "5655660",
+      "page": "https://www.pexels.com/photo/a-bus-shelter-with-billboards-illuminated-at-night-5655660/",
+      "license": "https://www.pexels.com/license/"
+    }
+  }
+}

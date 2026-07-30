@@ -1,0 +1,41 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "workshop-cap",
+    "title": "APEX ZERO — cap front patch",
+    "category": "cap",
+    "source_file": "cap-object.jpg",
+    "target": "real_inputs/workshop-cap.jpg",
+    "target_size": [
+      768,
+      1152
+    ],
+    "logo": "logos/apex-zero.png",
+    "material": "fabric_print",
+    "points": [
+      [
+        335,
+        775
+      ],
+      [
+        575,
+        790
+      ],
+      [
+        560,
+        875
+      ],
+      [
+        325,
+        850
+      ]
+    ],
+    "source": {
+      "photographer": "Yaroslav Shuraev",
+      "provider": "Pexels",
+      "photo_id": "4888594",
+      "page": "https://www.pexels.com/photo/a-close-up-shot-of-a-cap-on-a-wooden-table-4888594/",
+      "license": "https://www.pexels.com/license/"
+    }
+  }
+}

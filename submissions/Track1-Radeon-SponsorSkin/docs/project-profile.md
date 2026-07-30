@@ -25,14 +25,15 @@ without handing brand identity to the generative model.
 ## 2. Target users and application scenarios
 
 - Freelance designers preparing client-ready sponsorship concepts.
-- Small motorsport teams visualizing sponsor inventory on vehicles.
-- Event and brand teams testing billboard or venue signage.
-- Apparel creators previewing print placement on fabric.
+- Small motorsport teams visualizing sponsor inventory on cars.
+- Fleet and logistics teams testing bus and delivery-truck campaigns.
+- Event and brand teams testing billboards and bus-shelter displays.
+- Apparel creators previewing placements on hoodies and caps.
 - Small businesses evaluating paint, vinyl, and sign concepts before
   fabrication.
 
-The primary scenarios are billboard/signage, vehicle-panel vinyl, printed
-fabric, and painted wall graphics.
+The committed scenarios are a Porsche 911 GT2 RS, city bus, delivery truck,
+blank hoodie, cap, street billboard, and illuminated bus-shelter display.
 
 ## 3. User workflow
 
@@ -109,9 +110,10 @@ CPU-safe artifact path and is never presented as model or Radeon performance.
 
 ## 9. Local evidence
 
-- 35 passing CPU-safe tests at artifact-build time.
-- Three fictional procedural scenarios with committed inputs, logos, masks,
-  exact warped layers, and rough previews.
+- 36 passing CPU-safe tests at artifact-build time.
+- Seven rights-documented stock-photo scenarios with committed inputs, exact
+  logo layers, masks, and local rough previews.
+- Three procedural fixtures retained only for deterministic regression tests.
 - Local passthrough preservation: outside changed-pixel ratio 0 and outside
   SSIM 1 on the committed benchmark fixture.
 - Interactive Gradio workflow verified through real browser operation.
@@ -129,11 +131,10 @@ fidelity. It is not a release blocker.
 
 ## 11. Limitations and honest status
 
-Current demo images are procedural development fixtures, not real photos. Local
-outputs are deterministic rough previews, not generated refinements. Radeon
-model compatibility, visual improvement, cold/warm latency, and peak VRAM must
-be filled from real cloud runs. A model revision must be pinned after the first
-passing smoke test. LoRA remains experimental.
+Current local outputs are deterministic exact-logo previews, not generated
+refinements. Radeon model compatibility, visual improvement, cold/warm latency,
+and peak VRAM must be filled from real cloud runs. A model revision must be
+pinned after the first passing smoke test. LoRA remains experimental.
 
 ## 12. Practical value
 
@@ -145,6 +146,7 @@ and hardware evidence visible.
 ## References
 
 - AMD AI DevMaster Hackathon: https://luma.com/amd-4dhi
+- Pexels License: https://www.pexels.com/license/
 - FLUX.2 Klein 4B model card:
   https://huggingface.co/black-forest-labs/FLUX.2-klein-4B
 - Diffusers FLUX.2 documentation:

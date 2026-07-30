@@ -1,0 +1,41 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "street-billboard",
+    "title": "KINETIQ — street billboard",
+    "category": "billboard",
+    "source_file": "billboard.jpg",
+    "target": "real_inputs/street-billboard.jpg",
+    "target_size": [
+      1280,
+      768
+    ],
+    "logo": "logos/kinetiq.png",
+    "material": "billboard",
+    "points": [
+      [
+        220,
+        65
+      ],
+      [
+        1035,
+        65
+      ],
+      [
+        1035,
+        525
+      ],
+      [
+        220,
+        525
+      ]
+    ],
+    "source": {
+      "photographer": "Peter Dyllong",
+      "provider": "Pexels",
+      "photo_id": "36519146",
+      "page": "https://www.pexels.com/photo/blank-billboard-in-urban-street-setting-36519146/",
+      "license": "https://www.pexels.com/license/"
+    }
+  }
+}

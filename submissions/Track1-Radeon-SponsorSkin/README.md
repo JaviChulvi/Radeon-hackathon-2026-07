@@ -4,10 +4,11 @@ Radeon SponsorSkin turns a target photograph and an exact SVG or transparent
 PNG logo into an auditable sponsorship mockup while keeping brand geometry
 outside the generative model.
 
-![Local deterministic billboard preview](demo_assets/local_previews/billboard/rough_composite.png)
+![Local exact-logo preview on a real Porsche 911 GT2 RS](demo_assets/real_previews/porsche-911/rough_composite.png)
 
-> The image above is a procedural, deterministic local preview. It is not
-> generative output and does not demonstrate Radeon performance.
+> The image above uses a credited Pexels stock photograph and deterministic
+> logo placement. It is not FLUX output and does not demonstrate Radeon
+> performance.
 
 ## Track 1 fit
 
@@ -33,7 +34,8 @@ Radeon Cloud instance. No local macOS measurement is presented as GPU evidence.
 - Original, rough, model-only, and final comparison.
 - Preservation, SSIM, color, sharpness, and mask metrics.
 - Unique run directories with images, settings, environment, and manifest.
-- Three rights-clear procedural fixtures and an interactive Gradio UI.
+- Seven rights-documented stock-photo examples, three procedural regression
+  fixtures, and an interactive Gradio UI.
 
 ## Architecture
 
@@ -101,10 +103,10 @@ Create only the deterministic composition artifacts:
 
 ```bash
 python scripts/compose.py \
-  --target demo_assets/inputs/billboard.png \
-  --logo demo_assets/logos/nova-grid.png \
-  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
-  --material billboard \
+  --target demo_assets/real_inputs/porsche-911.jpg \
+  --logo demo_assets/logos/apex-zero.png \
+  --point 485,510 --point 730,535 --point 715,625 --point 480,600 \
+  --material vinyl \
   --output runs/compose-example
 ```
 
@@ -112,13 +114,19 @@ Exercise the complete artifact contract with local passthrough:
 
 ```bash
 python scripts/run_local.py \
-  --target demo_assets/inputs/billboard.png \
-  --logo demo_assets/logos/nova-grid.png \
-  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
-  --material billboard --seed 42
+  --target demo_assets/real_inputs/porsche-911.jpg \
+  --logo demo_assets/logos/apex-zero.png \
+  --point 485,510 --point 730,535 --point 715,625 --point 480,600 \
+  --material vinyl --seed 42
 ```
 
-Regenerate the three committed fictional fixtures:
+Rebuild the seven real-world exact-logo previews:
+
+```bash
+python scripts/prepare_real_demo_assets.py --output demo_assets
+```
+
+Regenerate the three procedural regression fixtures:
 
 ```bash
 python scripts/generate_demo_assets.py --output demo_assets --force
@@ -134,7 +142,7 @@ python scripts/doctor.py --json benchmarks/local-environment.json
 python scripts/benchmark.py --output benchmarks/local-results.json
 ```
 
-Expected CPU-safe result at this revision: `35 passed`. The committed 1280 x
+Expected CPU-safe result at this revision: `36 passed`. The committed 1280 x
 768 passthrough benchmark records an outside changed-pixel ratio of `0`, an
 outside SSIM of `1`, and a warm mean of approximately `0.425 s`. That timing is
 for the deterministic artifact path only—no generative model and no Radeon GPU
@@ -159,20 +167,20 @@ Run one masked smoke test:
 
 ```bash
 python scripts/smoke_flux.py \
-  --target demo_assets/inputs/billboard.png \
-  --logo demo_assets/logos/nova-grid.png \
-  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
-  --material billboard --steps 4 --strength 0.65
+  --target demo_assets/real_inputs/porsche-911.jpg \
+  --logo demo_assets/logos/apex-zero.png \
+  --point 485,510 --point 730,535 --point 715,625 --point 480,600 \
+  --material vinyl --steps 4 --strength 0.65
 ```
 
 Measure one cold process path and at least three warm runs:
 
 ```bash
 python scripts/benchmark_flux.py \
-  --target demo_assets/inputs/billboard.png \
-  --logo demo_assets/logos/nova-grid.png \
-  --point 255,235 --point 1015,210 --point 980,530 --point 285,550 \
-  --material billboard --iterations 4 \
+  --target demo_assets/real_inputs/porsche-911.jpg \
+  --logo demo_assets/logos/apex-zero.png \
+  --point 485,510 --point 730,535 --point 715,625 --point 480,600 \
+  --material vinyl --iterations 4 \
   --output benchmarks/radeon-results.json
 ```
 
@@ -236,11 +244,24 @@ See [dataset methodology](docs/dataset-methodology.md). LoRA may enter a demo
 only after a loadable Radeon-trained checkpoint improves held-out comparisons
 without worsening preservation or logo fidelity.
 
+## Real-world example set
+
+| Surface | Original | Local exact-logo preview |
+|---|---|---|
+| Porsche 911 GT2 RS | [`real_inputs/porsche-911.jpg`](demo_assets/real_inputs/porsche-911.jpg) | [`real_previews/porsche-911`](demo_assets/real_previews/porsche-911/rough_composite.png) |
+| City bus | [`real_inputs/city-bus.jpg`](demo_assets/real_inputs/city-bus.jpg) | [`real_previews/city-bus`](demo_assets/real_previews/city-bus/rough_composite.png) |
+| Delivery truck | [`real_inputs/delivery-truck.jpg`](demo_assets/real_inputs/delivery-truck.jpg) | [`real_previews/delivery-truck`](demo_assets/real_previews/delivery-truck/rough_composite.png) |
+| Blank hoodie | [`real_inputs/blank-hoodie.jpg`](demo_assets/real_inputs/blank-hoodie.jpg) | [`real_previews/blank-hoodie`](demo_assets/real_previews/blank-hoodie/rough_composite.png) |
+| Cap | [`real_inputs/workshop-cap.jpg`](demo_assets/real_inputs/workshop-cap.jpg) | [`real_previews/workshop-cap`](demo_assets/real_previews/workshop-cap/rough_composite.png) |
+| Street billboard | [`real_inputs/street-billboard.jpg`](demo_assets/real_inputs/street-billboard.jpg) | [`real_previews/street-billboard`](demo_assets/real_previews/street-billboard/rough_composite.png) |
+| Bus shelter | [`real_inputs/bus-shelter.jpg`](demo_assets/real_inputs/bus-shelter.jpg) | [`real_previews/bus-shelter`](demo_assets/real_previews/bus-shelter/rough_composite.png) |
+
 ## Assets, licensing, and security
 
-The code and committed procedural fixtures are licensed under
-[Apache-2.0](LICENSE). NOVA GRID, APEX ZERO, and KINETIQ are fictional project
-wordmarks. See [demo asset credits](demo_assets/CREDITS.md).
+The code, procedural regression fixtures, and fictional NOVA GRID, APEX ZERO,
+and KINETIQ wordmarks are [Apache-2.0](LICENSE). The seven stock photographs
+remain under the Pexels License and are not relicensed by the project. See
+[demo asset credits](demo_assets/CREDITS.md) for photographer and source links.
 
 Do not commit credentials, model weights, cache directories, private
 photographs, or logos without redistribution and derivative-use rights. The
@@ -267,7 +288,6 @@ The profile is eight A4 pages and the poster is one A3 landscape page.
 
 ## Known limitations
 
-- Current examples are procedural illustrations, not real photographs.
 - Current local outputs are deterministic rough previews, not FLUX.2 results.
 - Radeon model compatibility, visual improvement, latency, and VRAM are
   unverified until cloud execution.

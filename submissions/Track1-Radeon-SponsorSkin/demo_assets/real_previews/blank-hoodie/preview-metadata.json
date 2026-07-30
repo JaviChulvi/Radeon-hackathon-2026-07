@@ -1,0 +1,42 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "blank-hoodie",
+    "title": "NOVA GRID — blank hoodie chest",
+    "category": "hoodie",
+    "source_file": "hoodie-vertical.jpg",
+    "target": "real_inputs/blank-hoodie.jpg",
+    "target_size": [
+      768,
+      1152
+    ],
+    "logo": "logos/nova-grid.png",
+    "material": "fabric_print",
+    "points": [
+      [
+        445,
+        525
+      ],
+      [
+        635,
+        530
+      ],
+      [
+        625,
+        605
+      ],
+      [
+        440,
+        595
+      ]
+    ],
+    "source": {
+      "photographer": "cottonbro studio",
+      "provider": "Pexels",
+      "photo_id": "5840464",
+      "page": "https://www.pexels.com/photo/men-wearing-blank-hoodies-5840464/",
+      "license": "https://www.pexels.com/license/",
+      "notice": "Fictional campaign concept; no endorsement by the pictured people."
+    }
+  }
+}

@@ -238,10 +238,13 @@ def _profile_cover(pdf: canvas.Canvas) -> None:
     image_width = (width - 84 - gap) / 2
     for index, (label, path) in enumerate(
         [
-            ("ORIGINAL", ASSETS_ROOT / "local_previews/billboard/original.png"),
             (
-                "LOCAL ROUGH COMPOSITE",
-                ASSETS_ROOT / "local_previews/billboard/rough_composite.png",
+                "ORIGINAL STOCK TARGET",
+                ASSETS_ROOT / "real_previews/street-billboard/original.png",
+            ),
+            (
+                "LOCAL EXACT-LOGO PREVIEW",
+                ASSETS_ROOT / "real_previews/street-billboard/rough_composite.png",
             ),
         ]
     ):
@@ -466,11 +469,11 @@ def _profile_geometry(pdf: canvas.Canvas) -> None:
     cards = [
         (
             "EXACT RGBA LAYER",
-            ASSETS_ROOT / "local_previews/vehicle-panel/logo_layer.png",
+            ASSETS_ROOT / "real_previews/porsche-911/logo_layer.png",
         ),
         (
             "FEATHERED EDIT MASK",
-            ASSETS_ROOT / "local_previews/vehicle-panel/edit_mask.png",
+            ASSETS_ROOT / "real_previews/porsche-911/edit_mask.png",
         ),
     ]
     for index, (label, path) in enumerate(cards):
@@ -629,7 +632,7 @@ def _profile_evidence(pdf: canvas.Canvas, benchmark: dict[str, object]) -> None:
 
     metric_width = (width - 84 - 24) / 3
     metrics = [
-        ("35 / 35", "CPU-safe tests passing"),
+        ("36 / 36", "CPU-safe tests passing"),
         ("0.000", "outside changed ratio"),
         ("1.000", "outside SSIM"),
     ]
@@ -713,23 +716,23 @@ def _profile_scenarios(pdf: canvas.Canvas) -> None:
     _section_title(
         pdf,
         "06 / Creative scenarios",
-        "Fictional procedural fixtures make local behavior reproducible and rights-clear",
+        "Rights-documented stock targets across transport, apparel, and outdoor media",
     )
     scenarios = [
         (
-            "NOVA GRID / BILLBOARD",
-            ASSETS_ROOT / "local_previews/billboard/rough_composite.png",
-            "billboard",
+            "APEX ZERO / PORSCHE 911 GT2 RS",
+            ASSETS_ROOT / "real_previews/porsche-911/rough_composite.png",
+            "sports car",
         ),
         (
-            "APEX ZERO / VEHICLE VINYL",
-            ASSETS_ROOT / "local_previews/vehicle-panel/rough_composite.png",
-            "vehicle-panel",
+            "KINETIQ / DELIVERY TRUCK",
+            ASSETS_ROOT / "real_previews/delivery-truck/rough_composite.png",
+            "fleet",
         ),
         (
-            "KINETIQ / FABRIC PRINT",
-            ASSETS_ROOT / "local_previews/fabric/rough_composite.png",
-            "fabric",
+            "NOVA GRID / BLANK HOODIE",
+            ASSETS_ROOT / "real_previews/blank-hoodie/rough_composite.png",
+            "apparel",
         ),
     ]
     card_height = 158
@@ -742,8 +745,8 @@ def _profile_scenarios(pdf: canvas.Canvas) -> None:
         pdf.drawString(326, y + 117, label)
         _text(
             pdf,
-            "Committed input, fictional transparent logo, four corners, exact layer, "
-            "mask, and deterministic rough preview.",
+            "Credited stock input, fictional transparent logo, four corners, exact "
+            "layer, mask, and deterministic local preview.",
             326,
             y + 92,
             205,
@@ -751,15 +754,15 @@ def _profile_scenarios(pdf: canvas.Canvas) -> None:
             color=MUTED,
             leading=12,
         )
-        _tag(pdf, "LOCAL PASSTHROUGH", 326, y + 28, color=ORANGE)
+        _tag(pdf, "LOCAL - NO FLUX USED", 326, y + 28, color=ORANGE)
         pdf.setFillColor(MUTED)
         pdf.setFont("Helvetica", 6.5)
         pdf.drawRightString(531, y + 33, key)
 
     _text(
         pdf,
-        "Final judging examples should add rights-cleared real photographs and real "
-        "Radeon refinements while retaining these fixtures as regression evidence.",
+        "Seven credited stock targets are committed. Final judging examples should "
+        "replace these local previews with measured Radeon FLUX refinements.",
         42,
         91,
         width - 84,
@@ -792,8 +795,8 @@ def _profile_status(pdf: canvas.Canvas) -> None:
             "Interactive Gradio app",
             "Radeon backend contract",
             "Doctor and benchmark tools",
-            "Three demo fixtures",
-            "35 passing tests",
+            "Seven real-world examples",
+            "36 passing tests",
         ],
         59,
         617,
@@ -830,8 +833,8 @@ def _profile_status(pdf: canvas.Canvas) -> None:
     pdf.drawString(60, 364, "Known limitations")
     _text(
         pdf,
-        "Current examples are procedural development fixtures, not real photographs. "
-        "Local outputs are deterministic rough previews, not model refinements. "
+        "Current examples use real stock photographs, but local outputs remain "
+        "deterministic exact-logo previews rather than model refinements. "
         "Radeon compatibility, visual improvement, latency, and peak VRAM require "
         "real cloud execution. LoRA remains an optional experiment.",
         60,
@@ -921,7 +924,7 @@ def build_poster(output_path: Path) -> None:
     _panel(pdf, 46, hero_y, hero_width, hero_height, fill=PANEL_2)
     _draw_image(
         pdf,
-        ASSETS_ROOT / "local_previews/billboard/rough_composite.png",
+        ASSETS_ROOT / "real_previews/street-billboard/rough_composite.png",
         58,
         hero_y + 47,
         hero_width - 24,
@@ -929,7 +932,7 @@ def build_poster(output_path: Path) -> None:
     )
     pdf.setFillColor(WHITE)
     pdf.setFont("Helvetica-Bold", 8)
-    pdf.drawString(61, hero_y + 24, "LOCAL DETERMINISTIC ROUGH COMPOSITE")
+    pdf.drawString(61, hero_y + 24, "LOCAL EXACT-LOGO PREVIEW - NO FLUX USED")
 
     x_right = 565
     right_width = width - x_right - 46
@@ -958,7 +961,7 @@ def build_poster(output_path: Path) -> None:
     pdf.setFont("Helvetica-Bold", 15)
     pdf.drawString(x_right + 22, 419, "Local evidence")
     evidence = [
-        ("35 / 35", "CPU-safe tests"),
+        ("36 / 36", "CPU-safe tests"),
         ("0.000", "outside changed ratio"),
         ("1.000", "outside SSIM"),
     ]
@@ -990,16 +993,16 @@ def build_poster(output_path: Path) -> None:
     scenario_height = 163
     scenario_width = (width - 92 - 24) / 3
     scenarios = [
-        ("BILLBOARD", "billboard"),
-        ("VEHICLE VINYL", "vehicle-panel"),
-        ("FABRIC PRINT", "fabric"),
+        ("PORSCHE 911", "porsche-911"),
+        ("CITY BUS", "city-bus"),
+        ("BLANK HOODIE", "blank-hoodie"),
     ]
     for index, (label, key) in enumerate(scenarios):
         x = 46 + index * (scenario_width + 12)
         _panel(pdf, x, scenario_y, scenario_width, scenario_height)
         _draw_image(
             pdf,
-            ASSETS_ROOT / f"local_previews/{key}/rough_composite.png",
+            ASSETS_ROOT / f"real_previews/{key}/rough_composite.png",
             x + 8,
             scenario_y + 28,
             scenario_width - 16,
@@ -1023,16 +1026,16 @@ def build_poster_svg(output_path: Path) -> None:
         payload = base64.b64encode(path.read_bytes()).decode("ascii")
         return f"data:image/png;base64,{payload}"
 
-    hero_uri = png_data_uri(ASSETS_ROOT / "local_previews/billboard/rough_composite.png")
+    hero_uri = png_data_uri(ASSETS_ROOT / "real_previews/street-billboard/rough_composite.png")
     items = [
-        ("BILLBOARD", "billboard"),
-        ("VEHICLE VINYL", "vehicle-panel"),
-        ("FABRIC PRINT", "fabric"),
+        ("PORSCHE 911", "porsche-911"),
+        ("CITY BUS", "city-bus"),
+        ("BLANK HOODIE", "blank-hoodie"),
     ]
     scenario_markup = []
     for index, (label, key) in enumerate(items):
         x = 46 + index * (scenario_width + 16)
-        image_uri = png_data_uri(ASSETS_ROOT / f"local_previews/{key}/rough_composite.png")
+        image_uri = png_data_uri(ASSETS_ROOT / f"real_previews/{key}/rough_composite.png")
         scenario_markup.append(
             f"""
   <g id="scenario-{escape(key)}">
@@ -1075,7 +1078,7 @@ def build_poster_svg(output_path: Path) -> None:
     <rect x="46" y="184" width="520" height="390" rx="12" fill="#222A38"/>
     <image href="{hero_uri}" xlink:href="{hero_uri}"
       x="58" y="198" width="496" height="335" preserveAspectRatio="xMidYMid meet"/>
-    <text x="61" y="555" class="label">LOCAL DETERMINISTIC ROUGH COMPOSITE</text>
+    <text x="61" y="555" class="label">LOCAL EXACT-LOGO PREVIEW - NO FLUX USED</text>
   </g>
 
   <g id="workflow">
@@ -1090,7 +1093,7 @@ def build_poster_svg(output_path: Path) -> None:
   <g id="evidence">
     <rect x="590" y="386" width="555" height="188" rx="12" fill="#222A38"/>
     <text x="614" y="422" class="heading">Local evidence</text>
-    <text x="614" y="466" class="metric">35 / 35</text>
+    <text x="614" y="466" class="metric">36 / 36</text>
     <text x="760" y="466" class="metric">0.000</text>
     <text x="900" y="466" class="metric">1.000</text>
     <text x="614" y="489" class="small">CPU-SAFE TESTS</text>

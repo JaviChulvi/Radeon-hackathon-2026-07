@@ -1,0 +1,41 @@
+{
+  "scope": "Deterministic exact-logo placement preview; no FLUX model or Radeon GPU used",
+  "example": {
+    "id": "city-bus",
+    "title": "NOVA GRID — city bus side panel",
+    "category": "bus",
+    "source_file": "bus.jpg",
+    "target": "real_inputs/city-bus.jpg",
+    "target_size": [
+      768,
+      1024
+    ],
+    "logo": "logos/nova-grid.png",
+    "material": "vinyl",
+    "points": [
+      [
+        165,
+        615
+      ],
+      [
+        495,
+        615
+      ],
+      [
+        480,
+        725
+      ],
+      [
+        175,
+        720
+      ]
+    ],
+    "source": {
+      "photographer": "Алёна Жигарева",
+      "provider": "Pexels",
+      "photo_id": "9006627",
+      "page": "https://www.pexels.com/photo/white-and-blue-bus-under-blue-sky-9006627/",
+      "license": "https://www.pexels.com/license/"
+    }
+  }
+}
