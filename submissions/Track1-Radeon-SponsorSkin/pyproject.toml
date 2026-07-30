@@ -24,6 +24,10 @@ dev = [
   "pytest==9.1.1",
   "ruff==0.16.0",
 ]
+docs = [
+  "pypdf==6.10.0",
+  "reportlab==4.4.9",
+]
 ui = [
   "gradio==6.21.0",
 ]

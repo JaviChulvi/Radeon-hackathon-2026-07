@@ -12,7 +12,7 @@ FLUX.2 refinement remains disabled until it is validated on Radeon Cloud.
 
 ```bash
 conda activate radeon-sponsorskin
-python -m pip install -e ".[dev,ui]"
+python -m pip install -e ".[dev,docs,ui]"
 ```
 
 To create or update the complete Conda environment, including the native Cairo
@@ -94,7 +94,7 @@ Radeon Cloud instance is available. Keep the platform ROCm PyTorch build; do
 not install or upgrade `torch` from PyPI.
 
 ```bash
-python -m pip install -e ".[dev,ui]"
+python -m pip install -e ".[dev,docs,ui]"
 python -m pip install -r requirements-radeon.txt
 python scripts/doctor.py --require-rocm \
   --json benchmarks/radeon-environment.json
@@ -168,6 +168,26 @@ labels every existing preview as local passthrough output. These fixtures are
 safe for development and documentation; final judging examples should add
 rights-cleared real photographs and measured Radeon refinements when cloud
 access is available.
+
+## Submission documents
+
+- [Project profile PDF](docs/project-profile.pdf)
+- [Project profile source](docs/project-profile.md)
+- [Poster PDF](docs/poster.pdf)
+- [Editable poster source](docs/poster.svg)
+- [Four-minute demo script](docs/demo-script.md)
+- [Radeon Cloud evidence checklist](docs/cloud-evidence-checklist.md)
+
+Rebuild the PDFs and editable poster after changing evidence or examples:
+
+```bash
+python scripts/build_submission_artifacts.py
+```
+
+The builder validates the expected page counts and extracted text. The
+project-profile PDF is eight A4 pages; the poster is one A3 landscape page.
+Regenerate both after real Radeon measurements replace the clearly marked
+pending fields.
 
 ## Radeon status
 
